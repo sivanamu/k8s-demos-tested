@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: list-aws-products
+spec:
+  template:
+    spec:
+      containers:
+      - name: aws-list-products
+        image: sivanamu/list-aws-products 
+      restartPolicy: Never
+  backoffLimit: 4
+
