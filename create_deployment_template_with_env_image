@@ -1,0 +1,39 @@
+(base) [sivanandham@oc7826561783 0 ~  ⭑|✔]$ kubectl create deployment --image=nginx:alpine webapp --dry-run -o yaml | kubectl set resources --local  -f - --limits=cpu=1,memory=512M --requests=cpu=500m,memory=100M  --dry-run -o yaml \
+> | kubectl set env --local -f - DB_USER=oracle DB_PASSWORD=password -o yaml | kubectl set image --local -f - nginx=nginx:1.9.1 -o yaml | kubectl label pods --local -f -  environment=develpment \ tier=silver -o yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    ' tier': silver
+    app: webapp
+    environment: develpment
+  name: webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - env:
+        - name: DB_USER
+          value: oracle
+        - name: DB_PASSWORD
+          value: password
+        image: nginx:1.9.1
+        name: nginx
+        resources:
+          limits:
+            cpu: "1"
+            memory: 512M
+          requests:
+            cpu: 500m
+            memory: 100M
+status: {}
